@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+input, button {
+    margin: 5px;
+    padding: 5px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+#messages {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+#messages li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+#messages .system-message {
+    color: #666;
+    font-style: italic;
+    background: #f0f0f0;
+}
+
+#userList li {
+    display: inline-block;
+    margin: 5px;
+    padding: 5px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    transition: background 0.5s;
+}
+
+#userList .highlight {
+    background: #ffd700; /* Amarelo como exemplo */
+}

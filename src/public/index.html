@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat com WebSocket</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <h1>WebSocket</h1>
+    <div>
+        <input type="text" id="username" placeholder="Digite seu nome" value="User1">
+        <input type="text" id="room" placeholder="Digite o nome da sala" value="testRoom">
+        <button onclick="connect()">Conectar</button>
+    </div>
+
+    <ul id="messages"></ul>
+    <div>
+        <h2>Usuários na sala:</h2>
+        <ul id="userList"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
