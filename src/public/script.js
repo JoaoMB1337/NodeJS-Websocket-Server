@@ -1,50 +1,43 @@
 let ws;
+let countdownTime = 0;
+let countdownTimer = null;
+
+document.getElementById('joinBtn').addEventListener('click', connect);
 
 function connect() {
     const username = document.getElementById('username').value;
     const room = document.getElementById('room').value;
-    
+
     if (!username || !room) {
         alert('Por favor, insira um nome e uma sala');
         return;
     }
 
-    ws = new WebSocket(`ws://localhost:3000?room=${encodeURIComponent(room)}&username=${encodeURIComponent(username)}`);
+    ws = new WebSocket(`ws://192.168.1.214:3000?room=${encodeURIComponent(room)}&username=${encodeURIComponent(username)}`);
 
     ws.onopen = () => {
         console.log('Conectado ao servidor');
-        document.getElementById('message').disabled = false;
-        document.getElementById('sendBtn').disabled = false;
         document.getElementById('username').disabled = true;
         document.getElementById('room').disabled = true;
-        
+        document.getElementById('roomName').textContent = room;
         addMessage(`Você entrou na sala ${room}`, true);
     };
 
     ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        
-        if (data.type === 'userList') {
+
+        if (data.type === 'startCountdown') {
+            startCountdown(data.countdownTime); // Iniciar contagem regressiva
+        } else if (data.type === 'userList') {
             updateUserList(data.users);
-            const myUsername = document.getElementById('username').value;
-            const newUser = data.users.find(user => user !== myUsername && !document.querySelector(`#userList li[data-username="${user}"]`));
-            if (newUser) {
-                addMessage(`${newUser} entrou na sala`, true);
-                provideVisualFeedback(newUser);
-                playJoinSound(); 
-            }
-        } else if (data.type === 'message') {
-            addMessage(`${data.username}: ${data.content}`);
+        } else if (data.type === 'trainingData') {
+            addMessage(`${data.username}: ${data.timestamp} - ${data.speed} km/h - ${data.distance} km`);
         }
     };
 
-    ws.onclose = (event) => {
-        console.log('Desconectado do servidor', event.code, event.reason);
-        document.getElementById('sendBtn').disabled = true;
-        document.getElementById('username').disabled = false;
-        document.getElementById('room').disabled = false;
+    ws.onclose = () => {
+        console.log('Desconectado do servidor');
         addMessage('Você saiu da sala', true);
-        clearUserList();
     };
 
     ws.onerror = (error) => {
@@ -52,14 +45,45 @@ function connect() {
     };
 }
 
-function sendMessage() {
-    const messageInput = document.getElementById('message');
-    const message = messageInput.value.trim();
+function startCountdown(seconds) {
+    countdownTime = seconds;
+    updateCountdownDisplay();
+
+    countdownTimer = setInterval(() => {
+        if (countdownTime <= 0) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+            startTrainingSession(); // Começar a enviar dados de treino
+        } else {
+            countdownTime--;
+            updateCountdownDisplay();
+        }
+    }, 1000);
+}
+
+function updateCountdownDisplay() {
+    const countdownElement = document.getElementById('countdown');
+    countdownElement.textContent = `Início em: ${countdownTime}s`;
+}
+
+function startTrainingSession() {
+    console.log('Iniciando treino...');
     
-    if (message && ws.readyState === WebSocket.OPEN) {
-        ws.send(message);
-        messageInput.value = '';
-    }
+    // Simulação de envio de dados de treino
+    setInterval(() => {
+        const trainingData = {
+            type: 'trainingData',
+            timestamp: Date.now(),
+            speed: (Math.random() * 20).toFixed(2),
+            distance: (Math.random() * 5).toFixed(2),
+            spm: (Math.random() * 50).toFixed(2),
+            watts: (Math.random() * 300).toFixed(2)
+        };
+
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(trainingData)); // Enviar dados de treino para o servidor
+        }
+    }, 1000); // Envia dados a cada 1 segundo (exemplo)
 }
 
 function addMessage(message, isSystem = false) {
@@ -80,24 +104,7 @@ function updateUserList(users) {
     users.forEach(username => {
         const li = document.createElement('li');
         li.textContent = username;
-        li.setAttribute('data-username', username); 
+        li.setAttribute('data-username', username);
         userList.appendChild(li);
     });
-}
-
-function clearUserList() {
-    document.getElementById('userList').innerHTML = '';
-}
-
-function provideVisualFeedback(username) {
-    const userElement = document.querySelector(`#userList li[data-username="${username}"]`);
-    if (userElement) {
-        userElement.classList.add('highlight');
-        setTimeout(() => userElement.classList.remove('highlight'), 2000);
-    }
-}
-
-function playJoinSound() {
-    const audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); // URL de exemplo
-    audio.play().catch(err => console.log('Erro ao tocar som:', err));
 }

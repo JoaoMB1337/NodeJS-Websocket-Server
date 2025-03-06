@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat com WebSocket</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Aplicação de Treino</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>WebSocket</h1>
+    <h1>Bem-vindo ao Treino</h1>
+    
+    <!-- Campos para nome de usuário e sala -->
     <div>
-        <input type="text" id="username" placeholder="Digite seu nome" value="User1">
-        <input type="text" id="room" placeholder="Digite o nome da sala" value="testRoom">
-        <button onclick="connect()">Conectar</button>
+        <label for="username">Nome de Usuário:</label>
+        <input type="text" id="username" placeholder="Digite seu nome">
     </div>
-
+    <div>
+        <label for="room">Número da Sala:</label>
+        <input type="text" id="room" placeholder="Digite o número da sala">
+    </div>
+    <button id="joinBtn">Entrar na Sala</button>
+    
+    <h2>Sala: <span id="roomName"></span></h2>
+    <h3>Atletas na Sala</h3>
+    <ul id="userList"></ul>
+    
+    <div id="countdown">Início em: 0s</div>
+    
+    <h3>Mensagens</h3>
     <ul id="messages"></ul>
-    <div>
-        <h2>Usuários na sala:</h2>
-        <ul id="userList"></ul>
-    </div>
 
     <script src="script.js"></script>
 </body>

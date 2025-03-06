@@ -25,7 +25,7 @@ describe('WebSocket Server', () => {
     });
   });
 
-  test('deve listar usuários na sala', (done) => {
+  test('deve listar atletas na sala', (done) => {
     const ws1 = new WebSocket(`ws://localhost:${server.address().port}?room=testeRoom&username=Alice`);
     const ws2 = new WebSocket(`ws://localhost:${server.address().port}?room=testeRoom&username=Bob`);
 
@@ -39,6 +39,42 @@ describe('WebSocket Server', () => {
         done();
       }
     });
+
+    ws1.on('open', () => {
+      const userListMessage = JSON.stringify({
+        type: 'userList',
+        users: ['Alice', 'Bob']
+      });
+
+      ws1.send(userListMessage);
+    });
   });
+
+  test('deve iniciar contagem regressiva quando houver mais de 1 atleta', (done) => {
+    const ws1 = new WebSocket(`ws://localhost:${server.address().port}?room=testeRoom&username=Alice`);
+    const ws2 = new WebSocket(`ws://localhost:${server.address().port}?room=testeRoom&username=Bob`);
+
+    ws2.on('message', (message) => {
+      const data = JSON.parse(message);
+      if (data.type === 'startCountdown') {
+        expect(data.countdownTime).toBe(10);
+        ws1.close();
+        ws2.close();
+        done();
+      }
+    });
+
+    ws1.on('open', () => {
+      const userListMessage = JSON.stringify({
+        type: 'userList',
+        users: ['Alice', 'Bob']
+      });
+      
+      ws1.send(userListMessage);
+    });
+  });
+
+
+  
 
 });

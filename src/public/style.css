@@ -1,47 +1,143 @@
+/* Estilos Globais */
 body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #f7f7f7;
+    color: #333;
 }
 
+/* Cabeçalho */
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+/* Formulários (Entrada de Usuário e Sala) */
 input, button {
-    margin: 5px;
-    padding: 5px;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-#messages {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
+    font-size: 1em;
+    padding: 10px;
     margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-#messages li {
-    padding: 5px;
-    border-bottom: 1px solid #ddd;
+input:focus, button:focus {
+    outline: none;
+    border-color: #4CAF50;
 }
 
-#messages .system-message {
-    color: #666;
-    font-style: italic;
-    background: #f0f0f0;
+/* Lista de atletas */
+#userList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 #userList li {
-    display: inline-block;
-    margin: 5px;
-    padding: 5px;
-    background: #f0f0f0;
-    border-radius: 3px;
-    transition: background 0.5s;
+    background: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#userList li:hover {
+    background: #45a049;
+    transform: scale(1.05);
 }
 
 #userList .highlight {
-    background: #ffd700; /* Amarelo como exemplo */
+    background: #FFD700;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.6);
+}
+
+/* Mensagens */
+#messages {
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#messages li {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 1.1em;
+}
+
+#messages .system-message {
+    color: #888;
+    font-style: italic;
+    background: #f9f9f9;
+}
+
+/* Contagem Regressiva */
+#countdown {
+    font-size: 2.5em;
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Botões de Envio */
+#sendBtn {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+#sendBtn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+#sendBtn:hover:enabled {
+    background-color: #45a049;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    input, button {
+        font-size: 0.9em;
+    }
+
+    #messages, #userList {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #messages li {
+        font-size: 1em;
+    }
+
+    #countdown {
+        font-size: 2em;
+    }
 }
